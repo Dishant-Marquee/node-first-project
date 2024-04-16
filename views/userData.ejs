@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+
+        <!-- jquery css link -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+        <!-- datatable css link -->
+        <link rel="stylesheet" href="/DataTable/DataTable.min.css">
+
+        <!-- bootstrep css link -->
+        <link rel="stylesheet" href="/bootstrep5/bootstrep.min.css">
+
+        <!-- custom css link -->
+        <link href="/stylesheet/style.css" rel="stylesheet">
+
+    </head>
+
+    <table id="DataTable" class="table table-striped" style="width:100%">
+        <div class>
+            <div class="bg-dark">
+                <div class="py-4 border-bottom table-border">
+                    <h4 class=" text-center fw-medium mb-0 ms-2 fs-2">DATA TABLE</h4>
+                </div>
+            </div>
+            <thead class="bg-dark ">
+                <tr class=" border-bottom table-border">
+                    <th>_ID</th>
+                    <th>F_Name</th>
+                    <th>L_Name</th>
+                    <th>Email_Id</th>
+                    <th>Password</th>
+                    <th class="text-center">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+    </table>
+       <div class="modal" id="DataUpdate" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header text-center">
+                        <h5 class="modal-title fs-3 text-center">Update Data</h5>
+                        <button type="button" class="btn-close"data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form name="registrerForm" id="Dataform" class="row g-3" tabindex="-1" aria-hidden="true">
+                                <div class="row ">
+                                     <div class="col-12">
+                                         <label class="form-label fs-5">FirstName</label>
+                                         <input type="text" name="fname" id="editfname" class="form-control" aria-label="First name">
+                                     </div>
+                                     <div class="col-12 gy-2">
+                                         <label class="form-label fs-5">Last Name</label>
+                                         <input type="text" name="lname" id="editlname" class="form-control" aria-label="Last name">
+                                     </div>
+                                     <div class="col-md-12 gy-2">
+                                         <label for="inputEmail4" class="form-label fs-5">Email</label>
+                                         <input type="email" name="email" id="editemail" class="form-control" id="inputEmail4">
+                                     </div>
+                                     <div class="col-md-12">
+                                         <label for="inputPassword4" class="form-label fs-5">Password</label>
+                                         <input type="password" name="password" id="editpassword"class="form-control" id="inputPassword4">
+                                     </div>          
+                                     <div class="modal-footer d-flex flex-row justify-content-center">
+                                         <button type="button" class="btn btn-primary " data-bs-dismiss="modal">Close</button>
+                                         <button type="submit" id="update" class="btn btn-primary">Update</button>
+                                    </div>
+                                </div> 
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+         <input type='hidden' name="dataid" id="Data_id" />
+
+         
+        <!-- ----------jquery-cdn-js-link-------- -->
+            <script src="/jequery/jquery.min.js"></script>
+            <script src="/jequery/jquery.validate.min.js"></script>
+
+            <!-- ----------datatable-cdn-js-link-------- -->
+            <script src="/DataTable/DataTable.min.js"></script>
+
+            <!-- ---------- bootstrep-cdn-js-link-------- -->
+            <script src="/bootstrep5/bootstrap.bundle.min.js"></script>
+
+            <!-- ----------custom-cdn-js-link-------- -->
+            <script src="/javascript/custom.js"></script>
+        </body>
+
+    </html>

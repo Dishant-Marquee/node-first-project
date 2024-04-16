@@ -6,17 +6,12 @@ const path = require("path");
 const cors = require("cors");
 app.use(express.json());
 
-// app.set("view", path.join(__dirname,"view"));
 app.set("view engine", "ejs");
-app.use(express.static(path.join(__dirname + "/public"))); // koi pan directry ma path join karva mate thai che
+app.use(express.static(path.join(__dirname + "/public")));
 app.use(express.static(path.join(__dirname + "/controllers")));
 app.use(express.static(path.join(__dirname + "/plugins")));
 app.use(cors());
 
-
-// app.get('/', function (req, res) {
-//      res.render('login')
-// });
 app.use("/", ROUTERINDEX);
 
 mongoose

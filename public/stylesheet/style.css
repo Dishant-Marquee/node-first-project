@@ -1,6 +1,5 @@
 .bg-dark {
   --bs-dark-rgb: 0, 0, 0 !important;
-  /* --bs-body-bg: #000000; */
 }
 .bg-info {
   --bs-bg-opacity: 0.5 !important;
@@ -11,10 +10,6 @@
   --bs-emphasis-color: wheat;
   border-color: wheat
 }
-/* .error {
-  font-size: 14px;
-  color: red;
-} */
 body {
   background-color: #000000e3;
   color: wheat;
@@ -76,4 +71,10 @@ div#DataTable_info {
   align-items: center;
   padding-right: 20px;
   max-width: 400px;
+}
+.modal{
+  --bs-modal-bg: #000;
+}
+.modal-header{
+  border: none;
 }

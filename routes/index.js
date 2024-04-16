@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
 
-router.use('/', require('./web/index')); // Assuming login route handler is in a file named login.js
+router.use('/', require('./web/index'));
 
-router.use('/api', require('./api/index'));// api  routes handled by the api folder
+router.use('/api', require('./api/index'));
 
 module.exports = router;

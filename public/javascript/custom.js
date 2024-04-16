@@ -1,3 +1,5 @@
+// ======================================register=======================================
+
 $("#registerForm").validate({
   rules: {
     fname: {
@@ -49,10 +51,10 @@ $("#registerBtn").on("click", function (e) {
   $this = $("#registerForm");
   if ($this.valid()) {
     let registerdata = {
-      fname: $('input[name="fname"]').val().trim(),
-      lname: $('input[name="lname"]').val().trim(),
-      email: $('input[name="email"]').val().trim(),
-      password: $('input[name="password"]').val().trim(),
+      fname    : $('input[name="fname"]').val().trim(),
+      lname    : $('input[name="lname"]').val().trim(),
+      email    : $('input[name="email"]').val().trim(),
+      password : $('input[name="password"]').val().trim(),
     };
     $.ajax({
       url: "/api/auth/register",
@@ -60,8 +62,6 @@ $("#registerBtn").on("click", function (e) {
       method: "POST",
       data: JSON.stringify(registerdata),
     });
-    // let data = $this.serializeArray();
-    // console.log(data);
     $($this).each(function () {
       this.reset();
     });
@@ -117,9 +117,8 @@ $("#logInBtn").on("click", function (e) {
       contentType: "application/json",
       method: "POST",
       data: JSON.stringify(logindata),
+      
     });
-    // let data = $this.serialize();
-    // console.log(data);
     $($this).each(function () {
       this.reset();
     });
@@ -128,10 +127,12 @@ $("#logInBtn").on("click", function (e) {
   }
 });
 
-let dataTable;
+// =====================================DataTable================================
+
+let userDataTable;
 function loadDataTable() {
   if ($("#DataTable").length) {
-    dataTable = $("#DataTable").DataTable({
+    userDataTable = $("#DataTable").DataTable({
       lengthMenu: [
         [10, 25, 50, -1],
         [10, 25, 50, "All"],
@@ -141,7 +142,7 @@ function loadDataTable() {
       dom: "lfrtip",
       autoWidth: false,
       scrollX: true,
-      // processing: true,
+      processing: true,
       bSort: false,
       serverSide: true,
       loadingRecords: "&nbsp;",
@@ -155,7 +156,7 @@ function loadDataTable() {
       serverMethod: "POST",
 
       ajax: {
-        url: "/api/datatable/datafind",
+        url: "/api/auth/datafind",
       },
       columns: [{
         data:"",
@@ -186,7 +187,7 @@ function loadDataTable() {
         data: null,
 					defaultContent: "-",
 					render: function (data) {
-						return data.email;
+						return data.password;
 					}
       },
       {
@@ -194,14 +195,14 @@ function loadDataTable() {
         defaultContent: "-",
         render: function (data) {
           return `<div class=' text-center'> 
-                <button type="button" class="base_btn btn btn-sm mw-100 p-0  btn-outline-success bg-dark" id="updateBlog" title="Update Blog" data-myval="${data._id}"><i class="fa-solid fa-pen-to-square fs-4 p-1 mx-2"></i></button>
-                <button type="button" class="base_btn btn btn-sm mw-100 p-0 btn-outline-danger" id="deleteBlog" title="Delete Blog" data-myval="${data._id}"><i class="fas fa-trash fs-4 p-1 mx-2"></i></button>
+                <button type="button" class="base_btn btn btn-sm mw-100 p-0  btn-outline-success bg-dark" id="updateData" title="Update Data" data-myval="${data._id}"><i class="fa-solid fa-pen-to-square fs-4 p-1 mx-2"></i></button>
+                <button type="button" class="base_btn btn btn-sm mw-100 p-0 btn-outline-danger" id="deleteData" title="Delete Data" data-myval="${data._id}"><i class="fas fa-trash fs-4 p-1 mx-2"></i></button>
               </div>`;
         }
       }
     ],
     fnRowCallback: function (nRow, aData, iDisplayIndex) {
-      let oSettings = dataTable.settings()[0];
+      let oSettings = userDataTable.settings()[0];
       $("td:first", nRow).html(oSettings._iDisplayStart + iDisplayIndex + 1);
       nRow.id = aData._id;
       return nRow;
@@ -210,3 +211,74 @@ function loadDataTable() {
   }
 }
 loadDataTable();
+
+// =================================Data-model-show ==================================
+
+$('table').on('click','#updateData',function(e){
+  e.preventDefault();
+  let dataId = $(this).data('myval');
+  let rowElement = $(this).closest('tbody').find('tr').index($("#" + dataId));
+  let UserData = userDataTable.row(rowElement).data();
+  let getfname = UserData['fname'];
+  document.getElementById("editfname").value = getfname;
+  let getlname = UserData['lname'];
+  document.getElementById("editlname").value = getlname;
+  let getemail = UserData['email'];
+  document.getElementById("editemail").value = getemail;
+  let getpassword = UserData['password'];
+  document.getElementById("editpassword").value = getpassword;
+
+  $("#Data_id").val(dataId);
+
+  $("#DataUpdate").modal('show');
+});
+
+// =================================Data-Update ======================================
+
+  $(document).on('submit', '#Dataform',function (e) {
+    e.preventDefault();
+    let dataId = $("#Data_id").val();
+    let UserData = {};
+    $("#DataUpdate input").each(function() {
+        let fieldName = $(this).attr('name');
+        let fieldValue = $(this).val().trim();
+        UserData[fieldName] = fieldValue;
+    });
+    console.log(UserData);
+    $.ajax({
+      url: "/api/auth/updatedata/" + dataId,
+      contentType: 'application/json',
+      method: 'PUT',
+      data: JSON.stringify(UserData),
+      success: function(response) {
+          console.log('Data updated successfully:', response);
+          $('#DataTable').DataTable().ajax.reload();
+      },
+      error: function(error) {
+          console.log('Error updating data:', error);
+      }
+    });
+    $('#DataUpdate').modal('toggle');
+    return false;
+   });
+
+  // =================================Data-delete======================================
+
+  $('table').on('click','#deleteData',function(e) {
+    e.preventDefault();
+    if (confirm('Are you sure you want to delete this data?')) {
+        let dataId = $(this).data('myval');
+        $.ajax({
+            url: "/api/auth/deletedata/" + dataId,
+            method: 'DELETE',
+            success: function(response) {
+                console.log('Data deleted successfully:', response);
+                $('#DataTable').DataTable().ajax.reload();
+            },
+            error: function(error) {
+                console.log('Error deleting data:', error);
+                alert('Error deleting data. Please try again.');
+            }
+        });
+       }
+   });
