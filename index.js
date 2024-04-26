@@ -2,15 +2,23 @@ const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 const ROUTERINDEX = require("./routes/index");
+const session = require("express-session");
 const path = require("path");
 const cors = require("cors");
-app.use(express.json());
 
-app.set("view engine", "ejs");
+app.use(session({
+  secret: '12346654345456443545', 
+  resave: false,
+  saveUninitialized: true,
+}));
+app.use(express.json());
 app.use(express.static(path.join(__dirname + "/public")));
 app.use(express.static(path.join(__dirname + "/controllers")));
 app.use(express.static(path.join(__dirname + "/plugins")));
 app.use(cors());
+
+
+app.set("view engine", "ejs");
 
 app.use("/", ROUTERINDEX);
 

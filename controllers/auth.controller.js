@@ -1,26 +1,50 @@
-const USER = require("../models/user");
+const USER = require("../models/user.register");
+const UserLogin = require('../models/user.login');
+const bcrypt = require('bcrypt');
 
 exports.register = async (req, res) => {
+  const { fname, lname, email, password } = req.body;
   try {
-    const userLoginData = req.body;
-    const user = await USER.create(userLoginData);
+    const existingUser = await USER.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ error: 'Email already registered.' });
+    }
+    const newUser = new USER({ fname, lname, email, password });
+    await newUser.save();
 
-    res.status(201).json(user);
+    res.status(201).json({ message: 'User registered successfully.', user: newUser });
   } catch (error) {
-    console.log(error,"Register-Error");
+    console.error(error);
+    res.status(500).json({ error: 'Internal server error.' });
   }
 };
-
 // ===============================login======================================
 
 exports.login = async (req, res) => {
+  const { email, password } = req.body;
   try {
-    const data = req.body;
-    const user = await USER.create(data);
+    const user = await UserLogin.findOne({ email });
+    if (!user) {
+      return res.status(401).json({ error: 'User not found.' });
+    }
 
-    res.status(201).json(user);
-  } catch (error) {
-    console.log(error,"Login-Error");
+  const isPasswordMatch = await bcrypt.compare(password, user.password);
+
+  if (!isPasswordMatch) {
+    return res.status(401).json({ error: 'Invalid email or password' });
+  }
+  const userSession = {
+    "_id": user._id,
+    "email": user.email,
+  };
+
+  req.session.userId = userSession;
+
+  res.status(200).json({ message: 'Login successful' });
+}
+  catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal server error.' });
   }
 };
 

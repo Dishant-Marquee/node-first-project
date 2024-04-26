@@ -51,16 +51,23 @@ $("#registerBtn").on("click", function (e) {
   $this = $("#registerForm");
   if ($this.valid()) {
     let registerdata = {
-      fname    : $('input[name="fname"]').val().trim(),
-      lname    : $('input[name="lname"]').val().trim(),
-      email    : $('input[name="email"]').val().trim(),
-      password : $('input[name="password"]').val().trim(),
+      fname: $('input[name="fname"]').val().trim(),
+      lname: $('input[name="lname"]').val().trim(),
+      email: $('input[name="email"]').val().trim(),
+      password: $('input[name="password"]').val().trim(),
     };
     $.ajax({
       url: "/api/auth/register",
       contentType: "application/json",
       method: "POST",
       data: JSON.stringify(registerdata),
+      success: function (response) {
+        console.log(response);
+        window.location.href = "/login";
+      },
+      error: function (xhr) {
+        console.error(xhr.responseText);
+      },
     });
     $($this).each(function () {
       this.reset();
@@ -117,7 +124,13 @@ $("#logInBtn").on("click", function (e) {
       contentType: "application/json",
       method: "POST",
       data: JSON.stringify(logindata),
-      
+      success: function (response) {
+        console.log(response);
+        window.location.href = "/";
+      },
+      error: function (xhr) {
+        console.error(xhr.responseText);
+      },
     });
     $($this).each(function () {
       this.reset();
@@ -125,6 +138,12 @@ $("#logInBtn").on("click", function (e) {
   } else {
     console.log("not valid");
   }
+});
+
+$(document).on("click", "#logoutbtn", function (e) {
+  e.preventDefault();
+  window.location.href = "/api/auth/logout";
+  window.location.reload();
 });
 
 // =====================================DataTable================================
@@ -149,8 +168,8 @@ function loadDataTable() {
       language: {
         loadingRecords: "&nbsp;",
         paginate: {
-          previous: '<i class="fas fa-chevron-left fs-6 text-info"></i>',
-          next: '<i class="fas fa-chevron-right fs-6 text-info"></i>',
+          previous: '<i class="fas fa-chevron-left fs-6"></i>',
+          next: '<i class="fas fa-chevron-right fs-6"></i>',
         },
       },
       serverMethod: "POST",
@@ -158,55 +177,56 @@ function loadDataTable() {
       ajax: {
         url: "/api/auth/datafind",
       },
-      columns: [{
-        data:"",
-        defaultContent: "-"
-      },
-      {
-        data: null,
-					defaultContent: "-",
-					render: function (data) {
-						return data.fname;
-					}
-      },
-      {
-        data: null,
-					defaultContent: "-",
-					render: function (data) {
-						return data.lname;
-					}
-      },
-      {
-        data: null,
-					defaultContent: "-",
-					render: function (data) {
-						return data.email;
-					}
-      },
-      {
-        data: null,
-					defaultContent: "-",
-					render: function (data) {
-						return data.password;
-					}
-      },
-      {
-        data: null,
-        defaultContent: "-",
-        render: function (data) {
-          return `<div class=' text-center'> 
+      columns: [
+        {
+          data: "",
+          defaultContent: "-",
+        },
+        {
+          data: null,
+          defaultContent: "-",
+          render: function (data) {
+            return data.fname;
+          },
+        },
+        {
+          data: null,
+          defaultContent: "-",
+          render: function (data) {
+            return data.lname;
+          },
+        },
+        {
+          data: null,
+          defaultContent: "-",
+          render: function (data) {
+            return data.email;
+          },
+        },
+        {
+          data: null,
+          defaultContent: "-",
+          render: function (data) {
+            return data.password;
+          },
+        },
+        {
+          data: null,
+          defaultContent: "-",
+          render: function (data) {
+            return `<div class=' text-center'> 
                 <button type="button" class="base_btn btn btn-sm mw-100 p-0  btn-outline-success bg-dark" id="updateData" title="Update Data" data-myval="${data._id}"><i class="fa-solid fa-pen-to-square fs-4 p-1 mx-2"></i></button>
                 <button type="button" class="base_btn btn btn-sm mw-100 p-0 btn-outline-danger" id="deleteData" title="Delete Data" data-myval="${data._id}"><i class="fas fa-trash fs-4 p-1 mx-2"></i></button>
               </div>`;
-        }
-      }
-    ],
-    fnRowCallback: function (nRow, aData, iDisplayIndex) {
-      let oSettings = userDataTable.settings()[0];
-      $("td:first", nRow).html(oSettings._iDisplayStart + iDisplayIndex + 1);
-      nRow.id = aData._id;
-      return nRow;
-    }
+          },
+        },
+      ],
+      fnRowCallback: function (nRow, aData, iDisplayIndex) {
+        let oSettings = userDataTable.settings()[0];
+        $("td:first", nRow).html(oSettings._iDisplayStart + iDisplayIndex + 1);
+        nRow.id = aData._id;
+        return nRow;
+      },
     });
   }
 }
@@ -214,71 +234,74 @@ loadDataTable();
 
 // =================================Data-model-show ==================================
 
-$('table').on('click','#updateData',function(e){
+$("table").on("click", "#updateData", function (e) {
   e.preventDefault();
-  let dataId = $(this).data('myval');
-  let rowElement = $(this).closest('tbody').find('tr').index($("#" + dataId));
+  let dataId = $(this).data("myval");
+  let rowElement = $(this)
+    .closest("tbody")
+    .find("tr")
+    .index($("#" + dataId));
   let UserData = userDataTable.row(rowElement).data();
-  let getfname = UserData['fname'];
+  let getfname = UserData["fname"];
   document.getElementById("editfname").value = getfname;
-  let getlname = UserData['lname'];
+  let getlname = UserData["lname"];
   document.getElementById("editlname").value = getlname;
-  let getemail = UserData['email'];
+  let getemail = UserData["email"];
   document.getElementById("editemail").value = getemail;
-  let getpassword = UserData['password'];
+  let getpassword = UserData["password"];
   document.getElementById("editpassword").value = getpassword;
 
   $("#Data_id").val(dataId);
 
-  $("#DataUpdate").modal('show');
+  $("#DataUpdate").modal("show");
 });
 
 // =================================Data-Update ======================================
 
-  $(document).on('submit', '#Dataform',function (e) {
-    e.preventDefault();
-    let dataId = $("#Data_id").val();
-    let UserData = {};
-    $("#DataUpdate input").each(function() {
-        let fieldName = $(this).attr('name');
-        let fieldValue = $(this).val().trim();
-        UserData[fieldName] = fieldValue;
-    });
-    console.log(UserData);
+$(document).on("submit", "#Dataform", function (e) {
+  e.preventDefault();
+  let dataId = $("#Data_id").val();
+  let UserData = {};
+  $("#DataUpdate input").each(function () {
+    let fieldName = $(this).attr("name");
+    let fieldValue = $(this).val().trim();
+    UserData[fieldName] = fieldValue;
+  });
+  console.log(UserData);
+  $.ajax({
+    url: "/api/auth/updatedata/" + dataId,
+    contentType: "application/json",
+    method: "PUT",
+    data: JSON.stringify(UserData),
+    success: function (response) {
+      console.log("Data updated successfully:", response);
+      $("#DataTable").DataTable().ajax.reload();
+    },
+    error: function (error) {
+      console.log("Error updating data:", error);
+    },
+  });
+  $("#DataUpdate").modal("toggle");
+  return false;
+});
+
+// =================================Data-delete======================================
+
+$("table").on("click", "#deleteData", function (e) {
+  e.preventDefault();
+  if (confirm("Are you sure you want to delete this data?")) {
+    let dataId = $(this).data("myval");
     $.ajax({
-      url: "/api/auth/updatedata/" + dataId,
-      contentType: 'application/json',
-      method: 'PUT',
-      data: JSON.stringify(UserData),
-      success: function(response) {
-          console.log('Data updated successfully:', response);
-          $('#DataTable').DataTable().ajax.reload();
+      url: "/api/auth/deletedata/" + dataId,
+      method: "DELETE",
+      success: function (response) {
+        console.log("Data deleted successfully:", response);
+        $("#DataTable").DataTable().ajax.reload();
       },
-      error: function(error) {
-          console.log('Error updating data:', error);
-      }
+      error: function (error) {
+        console.log("Error deleting data:", error);
+        alert("Error deleting data. Please try again.");
+      },
     });
-    $('#DataUpdate').modal('toggle');
-    return false;
-   });
-
-  // =================================Data-delete======================================
-
-  $('table').on('click','#deleteData',function(e) {
-    e.preventDefault();
-    if (confirm('Are you sure you want to delete this data?')) {
-        let dataId = $(this).data('myval');
-        $.ajax({
-            url: "/api/auth/deletedata/" + dataId,
-            method: 'DELETE',
-            success: function(response) {
-                console.log('Data deleted successfully:', response);
-                $('#DataTable').DataTable().ajax.reload();
-            },
-            error: function(error) {
-                console.log('Error deleting data:', error);
-                alert('Error deleting data. Please try again.');
-            }
-        });
-       }
-   });
+  }
+});
