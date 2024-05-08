@@ -7,47 +7,126 @@
         <title>login</title>
 
         <!-- bootstrep css link -->
-        <link rel="stylesheet" href="/bootstrep5/bootstrep.min.css">
+        <link rel="stylesheet" href="/plugins/bootstrep5/bootstrep.min.css">
 
-         <!-- custom css link -->    
-         <link href="/stylesheet/style.css" rel="stylesheet">
+        <!----toastr css link-->
+        <link rel="stylesheet" href="/plugins/toastr/toastr.min.css">
+
+        <!-- custom css link -->
+        <link href="/stylesheet/style.css" rel="stylesheet">
     </head>
 
     <body class>
         <div class="container">
-            <div class="hero d-flex bg-info w-100 justify-content-center position-reletive">
-                <form  id="loginForm" class="row g-3 ">
-                    <div class="shadow-lg d-flex flex-wrap flex-column justify-content-center w-25 position-absolute top-50 start-50 translate-middle p-5 rounded-5 bg-dark">
-                        <h1 class=" text-center text-opacity-50 pb-3 fs-2 px-5">Login</h1>
+            <div
+                class="hero d-flex bg-info w-100 justify-content-center position-reletive">
+                <form id="loginForm" class="row g-3 ">
+                    <div
+                        class="shadow-lg d-flex flex-wrap flex-column justify-content-center w-25 position-absolute top-50 start-50 translate-middle p-5 rounded-5 bg-dark">
+                        <h1
+                            class=" text-center text-opacity-50 pb-3 fs-2 px-5">Login</h1>
                         <div class="col-md-12">
-                            <label for="inputEmail4" class="form-label fs-5">Email</label>
-                            <input type="email" name="email" class="form-control" id="inputEmail4">
+                            <label for="inputEmail4"
+                                class="form-label fs-5">Email</label>
+                            <input type="email" name="email"
+                                class="form-control" id="inputEmail4">
                         </div>
                         <div class="col-md-12">
-                            <div class="py-3">
-                                <label for="inputPassword4" class="form-label fs-5">Password</label>
-                                <input type="password" name="password" class="form-control" id="inputPassword4">
+                            <div class="pt-3">
+                                <label for="inputPassword4"
+                                    class="form-label fs-5">Password</label>
+                                <input type="password" name="password"
+                                    class="form-control" id="inputPassword4">
+                            </div>
+                            <div class>
+                                <p class="pt-4 text-end"><a href="#"
+                                        class="text-decoration-none"
+                                        id="frdpass">Forgot Password?</a></p>
                             </div>
                         </div>
+
                         <div class="col-md-12">
-                              <button type="submit" id="logInBtn" class="btn btn-primary mt-3">Sign in</button>
+                            <button type="submit" id="logInBtn"
+                                class="btn btn-primary mt-3">Sign in</button>
                         </div>
                         <div class="col-md-12">
-                            <p class="pt-4 text-center">don't have account yet? <a href="/register" class="text-decoration-none">Register</a></p>
+                            <p class="pt-4 text-center">don't have account yet?
+                                <a href="/register"
+                                    class="text-decoration-none">Register</a></p>
                         </div>
                     </div>
                 </form>
             </div>
         </div>
-        
-            <!-- ----------jquery-cdn-js-link-------- -->
-            <script src="/jequery/jquery.min.js"></script>
-            <script src="/jequery/jquery.validate.min.js"></script>
 
-            <!-- ---------- bootstrep-cdn-js-link-------- -->
-            <script src="/bootstrep5/bootstrap.bundle.min.js"></script>
+        <div id="pwdModal" class="modal fade" tabindex="-1" role="dialog"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header d-flex justify-content-center">
+                        <h1 class="text-center ">Forgot Password?</h1>
+                    </div>
+                    <div class="modal-body">
+                        <div class="col-md-12">
+                            <div class="panel panel-default">
+                                <div class="panel-body">
+                                    <div class="text-center">
+                                        <p>Enter Your Registered Email Id :
+                                            &#8628</p>
+                                        <div class="panel-body">
+                                            <form name="forgotpasswordForm"
+                                                id="forgotform" class="row g-3"
+                                                tabindex="-1"
+                                                aria-hidden="true">
+                                                <div class="form-group">
+                                                    <input
+                                                        id="emailInput"
+                                                        class="form-control input-lg mb-3"
+                                                        placeholder="E-mail Address"
+                                                        name="email"
+                                                        type="email">
+                                                </div>
+                                                <div
+                                                    class="modal-footer border-top-0 d-flex flex-row justify-content-center">
+                                                    <div
+                                                        class="col-md-4 ">
+                                                        <button
+                                                            class="btn btn-primary px-3"
+                                                            data-dismiss="modal"
+                                                            aria-hidden="true">Cancel</button>
+                                                    </div>
+                                                    <div
+                                                        class="col-md-4 ">
+                                                        <button type="submit"
+                                                            class="btn btn-primary px-3"
+                                                            data-dismiss="modal"
+                                                            aria-hidden="true">Submit</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-            <!-- ---------------custom-javascript---------------------->
+                </div>
+            </div>
+        </div>
+        <input type='hidden' name="dataid" id="Data_Id" />
+
+        <!-- ----------jquery-cdn-js-link-------- -->
+        <script src="/plugins/jequery/jquery.min.js"></script>
+        <script src="/plugins/jequery/jquery.validate.min.js"></script>
+
+        <!-- ---------- bootstrep-cdn-js-link-------- -->
+        <script src="/plugins/bootstrep5/bootstrap.bundle.min.js"></script>
+
+        <!----toastr cdn js link-->
+        <script src="/plugins/toastr/toastr.min.js"></script>
+
+        <!-- ---------------custom-javascript---------------------->
         <script src="/javascript/custom.js"></script>
     </body>
 

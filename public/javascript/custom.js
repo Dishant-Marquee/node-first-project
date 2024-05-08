@@ -62,10 +62,12 @@ $("#registerBtn").on("click", function (e) {
       method: "POST",
       data: JSON.stringify(registerdata),
       success: function (response) {
+        toastr.success("Register Successfully.");
         console.log(response);
         window.location.href = "/login";
       },
       error: function (xhr) {
+        toastr.error(xhr.responseJSON.error);
         console.error(xhr.responseText);
       },
     });
@@ -125,10 +127,12 @@ $("#logInBtn").on("click", function (e) {
       method: "POST",
       data: JSON.stringify(logindata),
       success: function (response) {
+        toastr.success("Log-in Successfully.");
         console.log(response);
         window.location.href = "/";
       },
       error: function (xhr) {
+        toastr.error("Log-in Faild");
         console.error(xhr.responseText);
       },
     });
@@ -136,6 +140,7 @@ $("#logInBtn").on("click", function (e) {
       this.reset();
     });
   } else {
+    toastr.error("please enter valid details");
     console.log("not valid");
   }
 });
@@ -148,10 +153,96 @@ $(document).on("click", "#logoutbtn", function (e) {
 
 // =====================================DataTable================================
 
+// let userDataTable;
+// function loadDataTable() {
+//   if ($("#User_Table").length) {
+//     userDataTable = $("#User_Table").DataTable({
+//       lengthMenu: [
+//         [10, 25, 50, -1],
+//         [10, 25, 50, "All"],
+//       ],
+//       iDisplayLength: 10,
+//       pageLength: 10,
+//       bDestroy: true,
+//       dom: "lfrtip",
+//       autoWidth: false,
+//       scrollX: true,
+//       processing: true,
+//       bSort: false,
+//       serverSide: true,
+//       // loadingRecords: "&nbsp;",
+//       language: {
+//         loadingRecords: "&nbsp;",
+//         paginate: {
+//           previous: '<i class="fas fa-chevron-left fs-6"></i>',
+//           next: '<i class="fas fa-chevron-right fs-6"></i>',
+//         },
+//       },
+//       serverMethod: "POST",
+
+//       ajax: {
+//         url: "/api/auth/datafind",
+//       },
+//       columns: [
+//         {
+//           data: "",
+//           defaultContent: "-",
+//         },
+//         {
+//           data: null,
+//           defaultContent: "-",
+//           render: function (data) {
+//             return data.fname;
+//           },
+//         },
+//         {
+//           data: null,
+//           defaultContent: "-",
+//           render: function (data) {
+//             return data.lname;
+//           },
+//         },
+//         {
+//           data: null,
+//           defaultContent: "-",
+//           render: function (data) {
+//             return data.email;
+//           },
+//         },
+//         {
+//           data: null,
+//           defaultContent: "-",
+//           render: function (data) {
+//             return data.password;
+//           },
+//         },
+//         {
+//           data: null,
+//           defaultContent: "-",
+//           render: function (data) {
+//             return `<div class=' text-center'>
+//                 <button type="button" class="base_btn btn btn-sm mw-100 p-0  btn-outline-success bg-dark" id="updateData" title="Update Data" data-myval="${data._id}"><i class="fa-solid fa-pen-to-square fs-4 p-1 mx-2"></i></button>
+//                 <button type="button" class="base_btn btn btn-sm mw-100 p-0 btn-outline-danger" id="deleteData" title="Delete Data" data-myval="${data._id}"><i class="fas fa-trash fs-4 p-1 mx-2"></i></button>
+//               </div>`;
+//           },
+//         },
+//       ],
+//       fnRowCallback: function (nRow, aData, iDisplayIndex) {
+//         let oSettings = userDataTable.settings()[0];
+//         $("td:first", nRow).html(oSettings._iDisplayStart + iDisplayIndex + 1);
+//         nRow.id = aData._id;
+//         return nRow;
+//       },
+//     });
+//   }
+// }
+// loadDataTable();
+
 let userDataTable;
+
 function loadDataTable() {
-  if ($("#DataTable").length) {
-    userDataTable = $("#DataTable").DataTable({
+  if ($("#User_Table").length > 0) {
+    userDataTable = $("#User_Table").DataTable({
       lengthMenu: [
         [10, 25, 50, -1],
         [10, 25, 50, "All"],
@@ -164,16 +255,14 @@ function loadDataTable() {
       processing: true,
       bSort: false,
       serverSide: true,
-      loadingRecords: "&nbsp;",
       language: {
         loadingRecords: "&nbsp;",
         paginate: {
-          previous: '<i class="fas fa-chevron-left fs-6"></i>',
-          next: '<i class="fas fa-chevron-right fs-6"></i>',
+          previous: '<i class="fas fa-chevron-left fs-6 text-info"></i>',
+          next: '<i class="fas fa-chevron-right fs-6 text-info"></i>',
         },
       },
       serverMethod: "POST",
-
       ajax: {
         url: "/api/auth/datafind",
       },
@@ -215,9 +304,9 @@ function loadDataTable() {
           defaultContent: "-",
           render: function (data) {
             return `<div class=' text-center'> 
-                <button type="button" class="base_btn btn btn-sm mw-100 p-0  btn-outline-success bg-dark" id="updateData" title="Update Data" data-myval="${data._id}"><i class="fa-solid fa-pen-to-square fs-4 p-1 mx-2"></i></button>
-                <button type="button" class="base_btn btn btn-sm mw-100 p-0 btn-outline-danger" id="deleteData" title="Delete Data" data-myval="${data._id}"><i class="fas fa-trash fs-4 p-1 mx-2"></i></button>
-              </div>`;
+                        <button type="button" class="base_btn btn btn-sm mw-100 p-0  btn-outline-success bg-dark" id="updateData" title="Update Data" data-myval="${data._id}"><i class="fa-solid fa-pen-to-square fs-4 p-1 mx-2"></i></button>
+                        <button type="button" class="base_btn btn btn-sm mw-100 p-0 btn-outline-danger" id="deleteData" title="Delete Data" data-myval="${data._id}"><i class="fas fa-trash fs-4 p-1 mx-2"></i></button>
+                      </div>`;
           },
         },
       ],
@@ -274,10 +363,12 @@ $(document).on("submit", "#Dataform", function (e) {
     method: "PUT",
     data: JSON.stringify(UserData),
     success: function (response) {
+      toastr.success("Data updated successfully.");
       console.log("Data updated successfully:", response);
-      $("#DataTable").DataTable().ajax.reload();
+      $("#User_Table").DataTable().ajax.reload();
     },
     error: function (error) {
+      toastr.error("Error updating data");
       console.log("Error updating data:", error);
     },
   });
@@ -295,13 +386,60 @@ $("table").on("click", "#deleteData", function (e) {
       url: "/api/auth/deletedata/" + dataId,
       method: "DELETE",
       success: function (response) {
+        toastr.success("Data deleted successfully.");
         console.log("Data deleted successfully:", response);
-        $("#DataTable").DataTable().ajax.reload();
+        $("#User_Table").DataTable().ajax.reload();
       },
       error: function (error) {
+        toastr.error(xhr.responseJSON.message);
         console.log("Error deleting data:", error);
         alert("Error deleting data. Please try again.");
       },
     });
   }
 });
+
+
+
+// ===================================forgot-password-modal-open======================================
+
+$(document).on("click", "#frdpass", function (e) {
+  e.preventDefault();
+
+  $("#pwdModal").modal("show");
+});
+
+//====================================forgot-password======================================
+
+$(document).on("submit", "#forgotform", function (e) {
+  e.preventDefault();
+
+  const email = $("#emailInput").val();
+
+  const userData = { email: email };
+
+  $.ajax({
+    url: "/api/auth/forgotpassword/",
+    contentType: "application/json",
+    method: "POST",
+    data: JSON.stringify(userData),
+    success: function (response) {
+      if (response.success) {
+        console.log(response);
+        alert("Password reset OTP sent successfully!");
+      } else {
+        alert("User not found. Please try again.");
+      }
+    },
+    error: function (error) {
+      console.log(error.responseText);
+      alert("Error sending password reset OTP. Please try again.");
+    },
+
+  });
+
+  $("#pwdModal").modal("hide");
+
+  return false;
+});
+

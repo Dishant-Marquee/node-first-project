@@ -10,25 +10,31 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
         <!-- datatable css link -->
-        <link rel="stylesheet" href="/DataTable/DataTable.min.css">
+        <link rel="stylesheet" href="/plugins/datatables_v5/dataTables.bootstrap5.min.css" type="text/css" />
+        <link rel="stylesheet" href="/plugins/datatables_v5/buttons.bootstrap5.min.css" type="text/css" />
+        <link rel="stylesheet" href="/plugins/datatables_v5/responsive.dataTables.min.css" type="text/css" />        <!-- <link rel="stylesheet" href="https://cdn.datatables.net/2.0.5/css/dataTables.dataTables.css" /> -->
+        <!-- <link rel="stylesheet" href="https://cdn.datatables.net/2.0.3/css/dataTables.dataTables.min.css"> -->
 
         <!-- bootstrep css link -->
-        <link rel="stylesheet" href="/bootstrep5/bootstrep.min.css">
+        <link rel="stylesheet" href="/plugins/bootstrep5/bootstrep.min.css">
+
+        <!----toastr css link-->
+        <link rel="stylesheet" href="/plugins/toastr/toastr.min.css">
 
         <!-- custom css link -->
         <link href="/stylesheet/style.css" rel="stylesheet">
 
     </head>
 
-    <table id="DataTable" class="table table-striped" style="width:100%">
+    <table id="User_Table" class="table table-striped" style="width:100%">
         <div class>
             <div class="bg-dark">
                 <div class="py-4 border-bottom table-border row ">
                     <h4 class=" ps-4 px-3 col-10 text-center fw-medium mb-0 ms-2 fs-2">DATA TABLE</h4>
                     <button type="button" id="logoutbtn" class="btn btn-primary col-1 my-0 mx-auto">Logout</button>
                 </div>
-            <thead class="bg-dark ">
-                <tr class=" border-bottom table-border">
+            <thead class="bg-dark">
+                <tr class="border-bottom table-border">
                     <th>_ID</th>
                     <th>F_Name</th>
                     <th>L_Name</th>
@@ -40,6 +46,10 @@
             <tbody>
             </tbody>
     </table>
+
+
+
+
        <div class="modal" id="DataUpdate" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -47,6 +57,7 @@
                         <h5 class="modal-title fs-3 text-center">Update Data</h5>
                         <button type="button" class="btn-close"data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
+                    
                     <div class="modal-body">
                         <form name="registrerForm" id="Dataform" class="row g-3" tabindex="-1" aria-hidden="true">
                                 <div class="row ">
@@ -80,14 +91,23 @@
 
          
         <!-- ----------jquery-cdn-js-link-------- -->
-            <script src="/jequery/jquery.min.js"></script>
-            <script src="/jequery/jquery.validate.min.js"></script>
+            <script src="/plugins/jequery/jquery.min.js"></script>
+            <script src="/plugins/jequery/jquery.validate.min.js"></script>
 
             <!-- ----------datatable-cdn-js-link-------- -->
-            <script src="/DataTable/DataTable.min.js"></script>
+<!-- DataTables V5 JS -->
+<script src="/plugins/dataTables_v5/jquery.dataTables.min.js"></script>
+<script src="/plugins/dataTables_v5/dataTables.bootstrap5.min.js"></script>
+<script src="/plugins/dataTables_v5/dataTables.buttons.min.js"></script>
+<script src="/plugins/dataTables_v5/buttons.bootstrap5.min.js"></script>
+<script src="/plugins/dataTables_v5/dataTables.responsive.min.js"></script>            <!-- <script src="https://cdn.datatables.net/2.0.5/js/dataTables.js"></script> -->
+            <!-- <script src="https://cdn.datatables.net/2.0.3/js/dataTables.min.js"></script> -->
 
             <!-- ---------- bootstrep-cdn-js-link-------- -->
-            <script src="/bootstrep5/bootstrap.bundle.min.js"></script>
+            <script src="/plugins/bootstrep5/bootstrap.bundle.min.js"></script>
+
+            <!----toastr cdn js link-->
+            <script src="/plugins/toastr/toastr.min.js"></script>
 
             <!-- ----------custom-cdn-js-link-------- -->
             <script src="/javascript/custom.js"></script>
