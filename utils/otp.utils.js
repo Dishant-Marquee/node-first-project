@@ -1,9 +1,10 @@
 const OTP = require('../models/otp.modal');
 
-async function saveOTP(userId, otp) {
+async function saveOTP(email, otp) {
   try {
     const newOTP = new OTP({
-      userId: userId,
+      // userId: userId,
+      email:  email,
       otp: otp,
     });
     console.log(newOTP);

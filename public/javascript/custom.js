@@ -118,8 +118,8 @@ $("#logInBtn").on("click", function (e) {
   $this = $("#loginForm");
   if ($this.valid()) {
     let logindata = {
-      email: $('input[name="email"]').val().trim(),
-      password: $('input[name="password"]').val().trim(),
+      email: $('#inputEmail4').val().trim(),
+      password: $('#inputPassword4').val().trim(),
     };
     $.ajax({
       url: "/api/auth/login",
@@ -147,96 +147,20 @@ $("#logInBtn").on("click", function (e) {
 
 $(document).on("click", "#logoutbtn", function (e) {
   e.preventDefault();
-  window.location.href = "/api/auth/logout";
-  window.location.reload();
+  
+  $.ajax({
+      url: "/api/auth/logout",
+      type: "GET",
+      success: function(response) {
+          window.location.href = "/";
+      },
+      error: function(xhr, status, error) {
+          console.error("Logout failed:", error);
+      }
+  });
 });
 
 // =====================================DataTable================================
-
-// let userDataTable;
-// function loadDataTable() {
-//   if ($("#User_Table").length) {
-//     userDataTable = $("#User_Table").DataTable({
-//       lengthMenu: [
-//         [10, 25, 50, -1],
-//         [10, 25, 50, "All"],
-//       ],
-//       iDisplayLength: 10,
-//       pageLength: 10,
-//       bDestroy: true,
-//       dom: "lfrtip",
-//       autoWidth: false,
-//       scrollX: true,
-//       processing: true,
-//       bSort: false,
-//       serverSide: true,
-//       // loadingRecords: "&nbsp;",
-//       language: {
-//         loadingRecords: "&nbsp;",
-//         paginate: {
-//           previous: '<i class="fas fa-chevron-left fs-6"></i>',
-//           next: '<i class="fas fa-chevron-right fs-6"></i>',
-//         },
-//       },
-//       serverMethod: "POST",
-
-//       ajax: {
-//         url: "/api/auth/datafind",
-//       },
-//       columns: [
-//         {
-//           data: "",
-//           defaultContent: "-",
-//         },
-//         {
-//           data: null,
-//           defaultContent: "-",
-//           render: function (data) {
-//             return data.fname;
-//           },
-//         },
-//         {
-//           data: null,
-//           defaultContent: "-",
-//           render: function (data) {
-//             return data.lname;
-//           },
-//         },
-//         {
-//           data: null,
-//           defaultContent: "-",
-//           render: function (data) {
-//             return data.email;
-//           },
-//         },
-//         {
-//           data: null,
-//           defaultContent: "-",
-//           render: function (data) {
-//             return data.password;
-//           },
-//         },
-//         {
-//           data: null,
-//           defaultContent: "-",
-//           render: function (data) {
-//             return `<div class=' text-center'>
-//                 <button type="button" class="base_btn btn btn-sm mw-100 p-0  btn-outline-success bg-dark" id="updateData" title="Update Data" data-myval="${data._id}"><i class="fa-solid fa-pen-to-square fs-4 p-1 mx-2"></i></button>
-//                 <button type="button" class="base_btn btn btn-sm mw-100 p-0 btn-outline-danger" id="deleteData" title="Delete Data" data-myval="${data._id}"><i class="fas fa-trash fs-4 p-1 mx-2"></i></button>
-//               </div>`;
-//           },
-//         },
-//       ],
-//       fnRowCallback: function (nRow, aData, iDisplayIndex) {
-//         let oSettings = userDataTable.settings()[0];
-//         $("td:first", nRow).html(oSettings._iDisplayStart + iDisplayIndex + 1);
-//         nRow.id = aData._id;
-//         return nRow;
-//       },
-//     });
-//   }
-// }
-// loadDataTable();
 
 let userDataTable;
 
@@ -426,20 +350,209 @@ $(document).on("submit", "#forgotform", function (e) {
     success: function (response) {
       if (response.success) {
         console.log(response);
-        alert("Password reset OTP sent successfully!");
+        $("#otpFillModal").modal("toggle");
+        console.log("Password reset OTP sent successfully!");
       } else {
-        alert("User not found. Please try again.");
+        console.log("User not found. Please try again.");
       }
     },
     error: function (error) {
       console.log(error.responseText);
       alert("Error sending password reset OTP. Please try again.");
     },
-
+    
   });
-
+  
   $("#pwdModal").modal("hide");
 
   return false;
+});
+
+// ===================================otp-fill-form=============================
+
+
+const Inputs = document.getElementById("otpInputs");
+
+    if (Inputs) {
+      Inputs.addEventListener("input", function (e) {
+        const target = e.target;
+        const val = target.value;
+
+        if (isNaN(val)) {
+          target.value = "";
+          return;
+        }
+
+        if (val !== "") {
+          const next = target.nextElementSibling;
+          if (next) {
+            next.focus();
+          }
+        }
+      });
+
+      Inputs.addEventListener("keyup", function (e) {
+        const target = e.target;
+        const key = e.key.toLowerCase();
+
+        if (key === "backspace" || key === "delete") {
+          target.value = "";
+          const prev = target.previousElementSibling;
+          if (prev) {
+            prev.focus();
+          }
+        }
+      });
+    } else {
+      console.error("Element with ID 'otpInputs' not found.");
+    }
+
+
+
+//=============================otp-val-merge-verify======================
+
+
+$(document).on("submit", "#otpForm", function (e) {
+  e.preventDefault();
+
+    const otpInputs = document.querySelectorAll('.otp-input');
+    let otp = '';
+
+    otpInputs.forEach(input => {
+      otp += input.value;
+    });
+
+    console.log('Concatenated OTP:', otp);
+
+    if (otp.length !== 6) {
+      console.error('OTP is not complete.');
+      return;
+    }
+
+    const email = $("#emailInput").val();
+
+    $.ajax({
+      url: "/api/auth/verifyotp",
+      contentType: "application/json",
+      method: "POST",
+      data: JSON.stringify({email: email,  otp: otp }),
+      success: function(response) {
+        if (response.success) {
+          console.log(response);
+          $('#crtnewpass').modal('show');
+          console.log("password reset OTP sent successfully!");
+        } else {
+          console.log("User not found. Please try again.");
+        }
+      },
+    
+    error: function (error) {
+      console.log(error.responseText);
+      alert("Error sending password reset OTP. Please try again.");
+    }
+  });
+
+    $("#otpFillModal").modal("hide");
+
+    return false;
+  });
+
+
+
+  //=======================resend-password======================
+
+  $(document).on("click", "#resendotp", function (e) {
+    e.preventDefault();
+
+    const email = $("#emailInput").val();
+
+  const userData = { email: email }; 
+
+    $.ajax({
+      url: "/api/auth/resendotp/",
+      contentType: "application/json",
+      method: "POST",
+      data: JSON.stringify(userData),
+      success: function(response) {
+        console.log(response.message);
+        console.log('otp is done');
+      },
+      error: function(error) {
+        console.error('Error resending OTP:', error);
+        alert('Failed to resend OTP.');
+      }
+    });
+  });
+  
+
+  //=====================create-new-password======================
+
+//   $(document).on("submit",'#createnewpassword',function(e) {
+//     e.preventDefault(); // Prevent the form from submitting
+
+//     const newPassword = document.getElementById('newpass').value;
+//     const confirmPassword = document.getElementById('confirmpass').value;
+//     const errorMessage = document.getElementById('error-message');
+//     // const email = $("#EEmailInput").val();
+
+//     if (newPassword !== confirmPassword) {
+//         errorMessage.textContent = 'Passwords do not match!';
+//     } else {
+//         errorMessage.textContent = '';
+
+//         // Submit the form via AJAX or however you need
+//         $.ajax({
+//             type: "POST",
+//             url: "/api/auth/resetpassword",
+//             data: JSON.stringify({ email: email, newPassword: newPassword }),
+//             contentType: "application/json",
+//             success: function(response) {
+//                 alert('Password reset successfully!');
+//                 $('#crtnewpass').modal('hide');
+//             },
+//             error: function(error) {
+//                 alert('Error resetting password. Please try again.');
+//             }
+//         });
+//     }
+// });
+
+//================================or====================================
+
+let userEmail = '';
+
+$(document).on("submit", "#forgotform", function(e) {
+    e.preventDefault(); 
+    userEmail = document.getElementById('emailInput').value;
+    console.log("Captured email:", userEmail);
+});
+
+$(document).on("submit", "#createnewpassword", function(e) {
+    e.preventDefault(); 
+
+    const newPassword = document.getElementById('newpass').value;
+    const confirmPassword = document.getElementById('confirmpass').value;
+    const errorMessage = document.getElementById('error-message');
+
+    if (newPassword !== confirmPassword) {
+        errorMessage.textContent = 'Passwords do not match!';
+    } else {
+        errorMessage.textContent = '';
+
+        $.ajax({
+          url: "/api/auth/resetpassword",
+          contentType: "application/json",
+          method: "POST",
+          data: JSON.stringify({ email: userEmail, newPassword: newPassword }),
+            success: function(response) {
+                toastr.success('Password reset successfully!');
+                console.log('password reset successfuly')
+                $('#crtnewpass').modal('hide');
+            },
+            error: function(error) {
+                toastr.error('Error resetting password. Please try again.');
+            }
+        });
+    }
 });
 
