@@ -166,7 +166,7 @@ let userDataTable;
 
 function loadDataTable() {
   if ($("#User_Table").length > 0) {
-    userDataTable = $("#User_Table").DataTable({
+    userDataTable = $("#User_Table").DataTable({"debug": true,
       lengthMenu: [
         [10, 25, 50, -1],
         [10, 25, 50, "All"],
@@ -403,9 +403,7 @@ const Inputs = document.getElementById("otpInputs");
           }
         }
       });
-    } else {
-      console.error("Element with ID 'otpInputs' not found.");
-    }
+    } 
 
 
 
@@ -486,38 +484,6 @@ $(document).on("submit", "#otpForm", function (e) {
   
 
   //=====================create-new-password======================
-
-//   $(document).on("submit",'#createnewpassword',function(e) {
-//     e.preventDefault(); // Prevent the form from submitting
-
-//     const newPassword = document.getElementById('newpass').value;
-//     const confirmPassword = document.getElementById('confirmpass').value;
-//     const errorMessage = document.getElementById('error-message');
-//     // const email = $("#EEmailInput").val();
-
-//     if (newPassword !== confirmPassword) {
-//         errorMessage.textContent = 'Passwords do not match!';
-//     } else {
-//         errorMessage.textContent = '';
-
-//         // Submit the form via AJAX or however you need
-//         $.ajax({
-//             type: "POST",
-//             url: "/api/auth/resetpassword",
-//             data: JSON.stringify({ email: email, newPassword: newPassword }),
-//             contentType: "application/json",
-//             success: function(response) {
-//                 alert('Password reset successfully!');
-//                 $('#crtnewpass').modal('hide');
-//             },
-//             error: function(error) {
-//                 alert('Error resetting password. Please try again.');
-//             }
-//         });
-//     }
-// });
-
-//================================or====================================
 
 let userEmail = '';
 

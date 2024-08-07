@@ -13,6 +13,7 @@ exports.register = async (req, res) => {
       return res.status(400).json({ error: "Email already registered." });
     }
     const newUser = new USER({ fname, lname, email, password });
+    console.log(newUser);
     await newUser.save();
 
     emailController.sendRegistrationEmail(req, res, email);
